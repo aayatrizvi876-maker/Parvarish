@@ -115,11 +115,12 @@ export function AdminCreatePostView({ onPostPublished, onCancel }) {
     if (!file) return;
     try {
       const res = await api.uploadFile(file);
+      const url = res.fileUrl || res.url;
       if (type === 'media') {
-        setMediaUrl(res.fileUrl);
-        setMediaType(res.mediaType);
+        setMediaUrl(url);
+        setMediaType(res.mediaType || 'image');
       } else {
-        setAttachmentUrl(res.fileUrl);
+        setAttachmentUrl(url);
       }
     } catch (err) {
       alert('Upload failed: ' + err.message);
