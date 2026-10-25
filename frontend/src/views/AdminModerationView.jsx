@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import { ShieldAlert, Check, EyeOff, Trash2, UserX, AlertCircle } from 'lucide-react';
+import { ShieldAlert, Check, EyeOff, Trash2, UserX, AlertCircle, ArrowLeft } from 'lucide-react';
 
-export function AdminModerationView() {
+export function AdminModerationView({ onBack }) {
   const [reports, setReports] = useState([]);
   const [statusFilter, setStatusFilter] = useState('PENDING');
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +35,11 @@ export function AdminModerationView() {
   return (
     <div className="flex-1 bg-slate-100 min-h-screen p-4 pb-16 animate-fade-in space-y-4">
       <div className="flex items-center space-x-2">
+        {onBack && (
+          <button onClick={onBack} className="p-1.5 -ml-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer" title="Back">
+            <ArrowLeft size={18} />
+          </button>
+        )}
         <ShieldAlert size={22} className="text-amber-600" />
         <h2 className="font-serif-title text-xl font-bold text-slate-900">Comment Moderation Queue</h2>
       </div>

@@ -6,7 +6,7 @@ import {
   CheckCircle2, BarChart2, Calendar, Award, RefreshCw, ChevronRight, Shield
 } from 'lucide-react';
 
-export function AdminDashboardView({ onNavigate }) {
+export function AdminDashboardView({ onNavigate, onBack }) {
   const { user } = useAuth();
   const [metrics, setMetrics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +43,15 @@ export function AdminDashboardView({ onNavigate }) {
               <RefreshCw size={12} className={isLoading ? 'animate-spin' : ''} />
             </button>
           </div>
-          <span className="text-xs text-slate-400">{new Date().toLocaleDateString()}</span>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => (onBack ? onBack() : onNavigate('home'))}
+              className="text-xs font-semibold bg-white/10 hover:bg-white/20 text-emerald-200 px-3 py-1 rounded-xl transition-colors cursor-pointer"
+            >
+              &larr; Back to Feed
+            </button>
+            <span className="text-xs text-slate-400 hidden sm:inline">{new Date().toLocaleDateString()}</span>
+          </div>
         </div>
 
         <div className="flex items-center space-x-3 relative z-10">

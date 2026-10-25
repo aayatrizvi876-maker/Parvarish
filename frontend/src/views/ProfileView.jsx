@@ -115,6 +115,7 @@ export function ProfileView({
   onBack, 
   onOpenNotifications, 
   onClose,
+  onNavigate,
   profileUserId 
 }) {
   const { user, profileData: authProfileData, updateProfileData, completeProfileSetup, logout } = useAuth();
@@ -529,6 +530,91 @@ export function ProfileView({
           </div>
 
         </div>
+
+        {/* 🏛️ HOD Administrative Control Center (Visible strictly on HOD Admin login) */}
+        {user?.role === 'ADMIN' && (
+          <div className="bg-white dark:bg-[#0F1A2E] rounded-3xl border border-amber-900/15 dark:border-amber-400/20 p-5 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+              <div className="flex items-center space-x-2">
+                <span className="text-base">🏛️</span>
+                <div>
+                  <h3 className="font-serif font-bold text-sm text-[#091734] dark:text-[#FFF4DC]">
+                    HOD Administrative Control Center
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Departmental publishing authority & moderation desk
+                  </p>
+                </div>
+              </div>
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-300">
+                ACTIVE ADMIN
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('posts')}
+                className="p-3 bg-slate-50 dark:bg-[#16233B] hover:bg-slate-100 dark:hover:bg-[#1d2e4d] border border-slate-200 dark:border-[#1F304E] rounded-2xl text-left transition-all active:scale-95 group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm">📝</span>
+                  <span className="text-[10px] text-slate-400 group-hover:text-slate-600">Open &rarr;</span>
+                </div>
+                <div className="font-bold text-xs text-[#091734] dark:text-white">Manage Posts</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Edit, Pin, or Delete publications</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('moderation')}
+                className="p-3 bg-slate-50 dark:bg-[#16233B] hover:bg-slate-100 dark:hover:bg-[#1d2e4d] border border-slate-200 dark:border-[#1F304E] rounded-2xl text-left transition-all active:scale-95 group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm">🛡️</span>
+                  <span className="text-[10px] text-slate-400 group-hover:text-slate-600">Open &rarr;</span>
+                </div>
+                <div className="font-bold text-xs text-[#091734] dark:text-white">Moderation Queue</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Review reported comments</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('users')}
+                className="p-3 bg-slate-50 dark:bg-[#16233B] hover:bg-slate-100 dark:hover:bg-[#1d2e4d] border border-slate-200 dark:border-[#1F304E] rounded-2xl text-left transition-all active:scale-95 group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm">👥</span>
+                  <span className="text-[10px] text-slate-400 group-hover:text-slate-600">Open &rarr;</span>
+                </div>
+                <div className="font-bold text-xs text-[#091734] dark:text-white">User Accounts</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Manage roles & user status</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('analytics')}
+                className="p-3 bg-slate-50 dark:bg-[#16233B] hover:bg-slate-100 dark:hover:bg-[#1d2e4d] border border-slate-200 dark:border-[#1F304E] rounded-2xl text-left transition-all active:scale-95 group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm">📊</span>
+                  <span className="text-[10px] text-slate-400 group-hover:text-slate-600">Open &rarr;</span>
+                </div>
+                <div className="font-bold text-xs text-[#091734] dark:text-white">Analytics & KPIs</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">Engagement & audit logs</div>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('dashboard')}
+              className="w-full py-2.5 px-3 bg-[#091734] hover:bg-[#13254e] text-white text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-xs cursor-pointer"
+            >
+              <span>Launch Full HOD Studio Dashboard</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+        )}
 
         {/* 5. Dynamic Stats Row (4 Posts, 0 Followers, 0 Following) */}
         <div className="py-2.5 flex items-center justify-around text-center">

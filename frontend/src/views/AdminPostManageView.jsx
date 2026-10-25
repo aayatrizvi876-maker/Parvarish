@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import { FileText, Pin, Trash2, Edit3, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { FileText, Pin, Trash2, Edit3, MessageSquare, CheckCircle2, ArrowLeft } from 'lucide-react';
 
-export function AdminPostManageView({ onOpenPost }) {
+export function AdminPostManageView({ onOpenPost, onBack }) {
   const [statusTab, setStatusTab] = useState('PUBLISHED');
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +45,11 @@ export function AdminPostManageView({ onOpenPost }) {
   return (
     <div className="flex-1 bg-slate-100 min-h-screen p-4 pb-16 animate-fade-in space-y-4">
       <div className="flex items-center space-x-2">
+        {onBack && (
+          <button onClick={onBack} className="p-1.5 -ml-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer" title="Back">
+            <ArrowLeft size={18} />
+          </button>
+        )}
         <FileText size={22} className="text-emerald-700" />
         <h2 className="font-serif-title text-xl font-bold text-slate-900">Manage Official Publications</h2>
       </div>

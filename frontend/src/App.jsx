@@ -106,6 +106,7 @@ function MainAppContent() {
             onOpenPost={(id) => setSelectedPostId(id)} 
             onBack={() => setActiveTab('home')}
             onOpenNotifications={() => setActiveTab('notifications')}
+            onNavigate={(tab) => setActiveTab(tab)}
           />
         );
       case 'settings':
@@ -119,22 +120,22 @@ function MainAppContent() {
 
       // Admin Specific Views
       case 'dashboard':
-        return <AdminDashboardView onNavigate={(tab) => setActiveTab(tab)} />;
+        return <AdminDashboardView onNavigate={(tab) => setActiveTab(tab)} onBack={() => setActiveTab('home')} />;
       case 'create':
         return (
           <AdminCreatePostView
             onPostPublished={() => setActiveTab('home')}
-            onCancel={() => setActiveTab('dashboard')}
+            onCancel={() => setActiveTab('home')}
           />
         );
       case 'posts':
-        return <AdminPostManageView onOpenPost={(id) => setSelectedPostId(id)} />;
+        return <AdminPostManageView onOpenPost={(id) => setSelectedPostId(id)} onBack={() => setActiveTab('profile')} />;
       case 'moderation':
-        return <AdminModerationView />;
+        return <AdminModerationView onBack={() => setActiveTab('profile')} />;
       case 'users':
-        return <AdminUserManageView />;
+        return <AdminUserManageView onBack={() => setActiveTab('profile')} />;
       case 'analytics':
-        return <AdminAnalyticsView />;
+        return <AdminAnalyticsView onBack={() => setActiveTab('profile')} />;
 
       default:
         return (

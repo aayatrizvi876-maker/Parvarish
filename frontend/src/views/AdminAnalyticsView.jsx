@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import { BarChart2, TrendingUp, Users, Heart, Shield, Activity } from 'lucide-react';
+import { BarChart2, TrendingUp, Users, Heart, Shield, Activity, ArrowLeft } from 'lucide-react';
 
-export function AdminAnalyticsView() {
+export function AdminAnalyticsView({ onBack }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +30,11 @@ export function AdminAnalyticsView() {
   return (
     <div className="flex-1 bg-slate-100 min-h-screen p-4 pb-16 animate-fade-in space-y-4">
       <div className="flex items-center space-x-2">
+        {onBack && (
+          <button onClick={onBack} className="p-1.5 -ml-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer" title="Back">
+            <ArrowLeft size={18} />
+          </button>
+        )}
         <BarChart2 size={22} className="text-teal-700" />
         <h2 className="font-serif-title text-xl font-bold text-slate-900">Platform Analytics</h2>
       </div>
