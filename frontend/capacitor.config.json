@@ -1,0 +1,8 @@
+{
+  "appId": "in.edu.parvarish.app",
+  "appName": "Parvarish",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

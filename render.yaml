@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: parvarish
+    env: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: parvarish_secret_jwt_key_2026_super_secure
+      - key: ADMIN_VERIFICATION_CODE
+        value: PARVARISH_HOD_2026
+      - key: SUPABASE_URL
+        value: https://andwyedirxcqtdjnmdzp.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFuZHd5ZWRpcnhjcXRkam5tZHpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MDU5NjUsImV4cCI6MjEwODQ4MTk2NX0.zv6IcXLGCqeavx9olCKABR_KkhA4S1bWYZTAqsp-184

@@ -1,0 +1,333 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, .font-serif-title {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Web Application Container Layout */
+.web-app-container {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #FAF8F5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Scrollbar for smooth touch feel */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dynamic Animation Utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.85; }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 1.5s infinite;
+}
+
+/* =========================================================================
+   REUSABLE THEME VARIABLES & CORE SYSTEM
+   ========================================================================= */
+:root {
+  /* Light Mode Palette */
+  --bg-page: #FAF8F5;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F8F6F0;
+  --bg-input: #FFFFFF;
+  --border-card: #EAE6DF;
+  --border-input: #CBD5E1;
+  --text-main: #0B1B3A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  
+  /* Enforced Navigation Colors */
+  --nav-active-bg: #F5EEDC;
+  --nav-active-text: #0B1B3A;
+  --nav-active-icon: #0B1B3A;
+  --nav-inactive-bg: transparent;
+  --nav-inactive-text: #F5F0E3;
+  --nav-inactive-icon: #D6D9E2;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  /* Dark Mode Palette (Rich Obsidian, Slate & Gold) */
+  --bg-page: #070D19;
+  --bg-card: #0F1A2E;
+  --bg-card-subtle: #16243D;
+  --bg-input: #13213B;
+  --border-card: #1F304E;
+  --border-input: #233758;
+  --text-main: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+
+  /* Enforced Navigation Colors (Exact match across all themes) */
+  --nav-active-bg: #F5EEDC;
+  --nav-active-text: #0B1B3A;
+  --nav-active-icon: #0B1B3A;
+  --nav-inactive-bg: transparent;
+  --nav-inactive-text: #F5F0E3;
+  --nav-inactive-icon: #D6D9E2;
+}
+
+/* =========================================================================
+   1. STRICT ENFORCEMENT: SIDEBAR NAVIGATION CONTRAST
+   ========================================================================= */
+
+/* Active item: Cream background, dark navy text & icon (NEVER white) */
+.sidebar-nav-active,
+html.dark .sidebar-nav-active,
+[data-nav-active="true"],
+html.dark [data-nav-active="true"] {
+  background-color: #F5EEDC !important;
+  color: #0B1B3A !important;
+}
+
+.sidebar-nav-active span,
+html.dark .sidebar-nav-active span,
+.sidebar-nav-active p,
+html.dark .sidebar-nav-active p,
+[data-nav-active="true"] span,
+html.dark [data-nav-active="true"] span {
+  color: #0B1B3A !important;
+}
+
+.sidebar-nav-active svg,
+html.dark .sidebar-nav-active svg,
+.sidebar-icon-active,
+html.dark .sidebar-icon-active,
+[data-nav-active="true"] svg,
+html.dark [data-nav-active="true"] svg {
+  color: #0B1B3A !important;
+  stroke: #0B1B3A !important;
+}
+
+.sidebar-nav-active svg path[fill="currentColor"],
+html.dark .sidebar-nav-active svg path[fill="currentColor"],
+.sidebar-icon-active path[fill="currentColor"],
+html.dark .sidebar-icon-active path[fill="currentColor"] {
+  fill: #0B1B3A !important;
+}
+
+/* Inactive sidebar items on the dark navy background */
+.sidebar-nav-inactive,
+html.dark .sidebar-nav-inactive {
+  background-color: transparent !important;
+  color: #F5F0E3 !important;
+}
+
+.sidebar-nav-inactive span,
+html.dark .sidebar-nav-inactive span {
+  color: #F5F0E3 !important;
+}
+
+.sidebar-nav-inactive svg,
+html.dark .sidebar-nav-inactive svg,
+.sidebar-icon-inactive,
+html.dark .sidebar-icon-inactive {
+  color: #D6D9E2 !important;
+  stroke: #D6D9E2 !important;
+}
+
+.sidebar-nav-inactive:hover,
+html.dark .sidebar-nav-inactive:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
+
+.sidebar-nav-inactive:hover span,
+html.dark .sidebar-nav-inactive:hover span,
+.sidebar-nav-inactive:hover svg,
+html.dark .sidebar-nav-inactive:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* =========================================================================
+   2. SETTINGS SUB-NAVIGATION (Active Cream Item)
+   ========================================================================= */
+.settings-subnav-active,
+html.dark .settings-subnav-active {
+  background-color: #F5EEDC !important;
+  color: #0B1B3A !important;
+  border-left-color: #C5A880 !important;
+}
+
+.settings-subnav-active span,
+html.dark .settings-subnav-active span,
+.settings-subnav-active svg,
+html.dark .settings-subnav-active svg,
+.settings-subnav-icon-active,
+html.dark .settings-subnav-icon-active {
+  color: #0B1B3A !important;
+  stroke: #0B1B3A !important;
+}
+
+/* =========================================================================
+   3. GENERAL RULE: LIGHT / CREAM BACKGROUNDS ALWAYS HAVE DARK NAVY TEXT & ICONS
+   ========================================================================= */
+.bg-\[\#F5EEDC\],
+.bg-\[\#F6EEDB\],
+.bg-\[\#FFF4DC\],
+.bg-\[\#FFF8EE\],
+html.dark .bg-\[\#F5EEDC\],
+html.dark .bg-\[\#F6EEDB\],
+html.dark .bg-\[\#FFF4DC\],
+html.dark .bg-\[\#FFF8EE\] {
+  color: #0B1B3A !important;
+}
+
+.bg-\[\#F5EEDC\] span,
+.bg-\[\#F6EEDB\] span,
+.bg-\[\#FFF4DC\] span,
+.bg-\[\#FFF8EE\] span,
+html.dark .bg-\[\#F5EEDC\] span,
+html.dark .bg-\[\#F6EEDB\] span,
+html.dark .bg-\[\#FFF4DC\] span,
+html.dark .bg-\[\#FFF8EE\] span {
+  color: #0B1B3A !important;
+}
+
+.bg-\[\#F5EEDC\] svg,
+.bg-\[\#F6EEDB\] svg,
+.bg-\[\#FFF4DC\] svg,
+.bg-\[\#FFF8EE\] svg,
+html.dark .bg-\[\#F5EEDC\] svg,
+html.dark .bg-\[\#F6EEDB\] svg,
+html.dark .bg-\[\#FFF4DC\] svg,
+html.dark .bg-\[\#FFF8EE\] svg {
+  color: #0B1B3A !important;
+  stroke: #0B1B3A !important;
+}
+
+/* =========================================================================
+   4. DARK MODE: CONTENT & CARD CONTRAST RULES
+   ========================================================================= */
+html.dark body {
+  background-color: #070D19;
+  color: #E2E8F0;
+}
+
+html.dark .web-app-container {
+  background-color: #070D19 !important;
+}
+
+/* Page canvas */
+html.dark .bg-\[\#FAF8F5\],
+html.dark .bg-\[\#FAF8F5\]\/95 {
+  background-color: #070D19 !important;
+}
+
+/* Cards & Elevated Containers in Dark Mode (exclude light/cream badges) */
+html.dark .bg-white:not(.sidebar-nav-active):not(.settings-subnav-active):not(.bg-\[\#F5EEDC\]) {
+  background-color: #0F1A2E !important;
+}
+
+html.dark .bg-white\/60,
+html.dark .bg-white\/80 {
+  background-color: rgba(15, 26, 46, 0.8) !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-slate-50\/70,
+html.dark .bg-slate-50\/80,
+html.dark .bg-slate-50\/90,
+html.dark .bg-slate-100,
+html.dark .bg-slate-100\/80 {
+  background-color: #16243D !important;
+}
+
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-slate-100:hover,
+html.dark .hover\:bg-slate-200\/50:hover,
+html.dark .hover\:bg-slate-200\/60:hover {
+  background-color: #1E3152 !important;
+}
+
+/* Borders in Dark Mode */
+html.dark .border-\[\#EAE6DF\],
+html.dark .border-slate-200,
+html.dark .border-slate-200\/70,
+html.dark .border-slate-200\/80,
+html.dark .border-slate-200\/90,
+html.dark .border-slate-300,
+html.dark .border-slate-100 {
+  border-color: #1F304E !important;
+}
+
+/* Form Inputs & Controls in Dark Mode */
+html.dark input[type="text"],
+html.dark input[type="email"],
+html.dark input[type="password"],
+html.dark textarea,
+html.dark select {
+  background-color: #13213B !important;
+  color: #F8FAFC !important;
+  border-color: #233758 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* Form focus states */
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #C5A880 !important;
+  outline: none !important;
+}
+
+/* Academic and Category Badges in Dark Mode */
+html.dark .bg-\[\#FDF6E2\] {
+  background-color: rgba(154, 107, 56, 0.25) !important;
+  color: #FBBF24 !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+html.dark .bg-\[\#EFECE6\] {
+  background-color: #16243D !important;
+  color: #E2E8F0 !important;
+  border-color: #1F304E !important;
+}
+
+/* Scrollbar in Dark Mode */
+html.dark ::-webkit-scrollbar-thumb {
+  background: #1F304E;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2A4168;
+}
