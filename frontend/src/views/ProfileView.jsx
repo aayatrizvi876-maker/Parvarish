@@ -315,11 +315,11 @@ export function ProfileView({
               setEditFocusField('general');
               setIsEditModalOpen(true);
             }}
-            className="flex items-center space-x-1.5 bg-[#091734] hover:bg-[#15274d] text-[#FFF4DC] px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs transition-all active:scale-95 border border-amber-300/30"
+            className="flex items-center space-x-1.5 bg-[#091734] hover:bg-[#15274d] text-[#FFF4DC] px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs transition-all active:scale-95 border border-amber-300/30 shrink-0 cursor-pointer"
             title="Edit Profile Details"
           >
             <Pencil size={12} className="text-amber-300" />
-            <span>Edit Profile</span>
+            <span className="hidden sm:inline">Edit Profile</span>
           </button>
 
           {/* Notification Bell */}
@@ -479,6 +479,21 @@ export function ProfileView({
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-serif">
               {profileData.bio || 'bio'}
             </p>
+          </div>
+
+          {/* Prominent Edit Profile Button (Works perfectly on Mobile & Desktop) */}
+          <div className="pt-3 pb-1">
+            <button
+              type="button"
+              onClick={() => {
+                setEditFocusField('general');
+                setIsEditModalOpen(true);
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-[#0F1A2E] hover:bg-amber-50/70 dark:hover:bg-[#162540] border border-slate-300 dark:border-[#1F304E] text-[#091734] dark:text-[#FFF4DC] font-bold text-xs sm:text-sm shadow-xs flex items-center justify-center space-x-2 transition-all active:scale-[0.98] cursor-pointer"
+            >
+              <Pencil size={14} className="text-amber-600 dark:text-amber-400" />
+              <span>Edit Profile Details</span>
+            </button>
           </div>
         </div>
 
@@ -727,7 +742,7 @@ function EditProfileModal({ initialData, focusField, onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-60 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
       <div 
         className="bg-[#FAF8F5] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl border border-[#EAE6DF] my-6 flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}

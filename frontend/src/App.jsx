@@ -201,7 +201,7 @@ function MainAppContent() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#FAF8F5]">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#FAF8F5] pb-20 md:pb-0">
         {renderCurrentView()}
 
         {/* Post Detail Modal */}

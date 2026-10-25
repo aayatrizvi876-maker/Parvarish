@@ -36,7 +36,7 @@ export function BottomNav({ activeTab, setActiveTab, unreadCount = 0 }) {
   const navItems = isAdmin ? adminNavItems : studentFacultyNavItems;
 
   return (
-    <div className="sticky bottom-0 left-0 right-0 bg-white/95 dark:bg-[#070D19]/95 backdrop-blur-md border-t border-amber-900/10 dark:border-[#1F304E] py-2 px-3 flex items-center justify-around z-30 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#070D19]/95 backdrop-blur-md border-t border-amber-900/10 dark:border-[#1F304E] py-2 px-3 flex items-center justify-around z-50 shadow-2xl">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
@@ -87,6 +87,6 @@ export function BottomNav({ activeTab, setActiveTab, unreadCount = 0 }) {
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 }
