@@ -15,7 +15,13 @@ const AuthContext = createContext();
 const STORAGE_KEY = 'parvarish_profile_custom_v2';
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('parvarish_user_session');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+  });
   const [token, setToken] = useState(localStorage.getItem('parvarish_token') || null);
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
@@ -176,39 +182,20 @@ export function AuthProvider({ children }) {
       }
 
       // 2. Check Remember Me preference and restore local session
-      const isRemembered = localStorage.getItem('parvarish_remember_me') === 'true';
       const storedToken = localStorage.getItem('parvarish_token');
+      const savedUserSession = localStorage.getItem('parvarish_user_session');
 
-      if (isRemembered && storedToken) {
+      if (storedToken || savedUserSession) {
         try {
           const data = await api.getMe();
-          if (data?.user?.email) {
+          if (data?.user) {
             if (isMounted) {
               setUser(data.user);
-              setToken(storedToken);
-            }
-          } else {
-            localStorage.removeItem('parvarish_token');
-            localStorage.removeItem('parvarish_remember_me');
-            if (isMounted) {
-              setToken(null);
-              setUser(null);
+              setToken(storedToken || `token_${Date.now()}`);
             }
           }
         } catch (err) {
-          console.warn('Session expired or unreachable:', err.message);
-          localStorage.removeItem('parvarish_token');
-          localStorage.removeItem('parvarish_remember_me');
-          if (isMounted) {
-            setToken(null);
-            setUser(null);
-          }
-        }
-      } else {
-        localStorage.removeItem('parvarish_token');
-        if (isMounted) {
-          setToken(null);
-          setUser(null);
+          console.warn('Session check warning:', err.message);
         }
       }
 
@@ -499,6 +486,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     localStorage.removeItem('parvarish_token');
     localStorage.removeItem('parvarish_remember_me');
+    localStorage.removeItem('parvarish_user_session');
     setToken(null);
     setUser(null);
     setIsSelectingRole(false);

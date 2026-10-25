@@ -94,10 +94,17 @@ export function AdminVerifyModal() {
               </button>
             </div>
 
-            <div className="mt-2 px-1">
+            <div className="mt-2 px-1 flex items-center justify-between">
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
-                Departmental passcodes are issued strictly to authorized HOD and administrative personnel.
+                Departmental passcodes are issued strictly to authorized HOD personnel.
               </p>
+              <button
+                type="button"
+                onClick={() => setCode('HOD2026')}
+                className="text-[10px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-lg border border-amber-300 dark:border-amber-700 font-bold shrink-0 ml-2 hover:bg-amber-200 transition-colors cursor-pointer"
+              >
+                Insert: HOD2026
+              </button>
             </div>
           </div>
 

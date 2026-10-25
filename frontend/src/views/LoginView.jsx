@@ -290,6 +290,47 @@ export function LoginView() {
                 <span>Sign In</span>
               )}
             </button>
+
+            {/* Quick University Demo Access Pills */}
+            <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
+              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 text-center mb-2 font-serif">
+                Instant University Demo Access:
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('student@uniteduniversity.edu.in');
+                    setPassword('parvarish2026');
+                    try {
+                      setIsSubmitting(true);
+                      await loginWithUniversityEmail('student@uniteduniversity.edu.in', 'parvarish2026');
+                    } catch (e) {} finally {
+                      setIsSubmitting(false);
+                    }
+                  }}
+                  className="py-2 px-2 bg-slate-50 dark:bg-[#071328] hover:bg-slate-100 dark:hover:bg-[#091b3a] border border-slate-200 dark:border-slate-700 rounded-xl text-center text-[11px] font-semibold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-2xs"
+                >
+                  🎓 Student Access
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('hod.cse@uniteduniversity.edu.in');
+                    setPassword('HOD2026');
+                    try {
+                      setIsSubmitting(true);
+                      await loginWithUniversityEmail('hod.cse@uniteduniversity.edu.in', 'HOD2026');
+                    } catch (e) {} finally {
+                      setIsSubmitting(false);
+                    }
+                  }}
+                  className="py-2 px-2 bg-amber-50/70 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 border border-amber-200 dark:border-amber-800/60 rounded-xl text-center text-[11px] font-bold text-amber-800 dark:text-amber-300 transition-all cursor-pointer shadow-2xs"
+                >
+                  🏛️ HOD Admin Access
+                </button>
+              </div>
+            </div>
           </form>
 
         </div>
