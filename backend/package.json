@@ -4,6 +4,7 @@
   "description": "Backend API service for Parvarish university community mobile app",
   "main": "src/server.js",
   "scripts": {
+    "build": "echo 'backend ready'",
     "start": "node src/server.js",
     "seed": "node src/db/seed.js"
   },
