@@ -17,9 +17,10 @@ import {
 } from '../components/icons/ParvarishIcons';
 import { Moon, Sun, ChevronDown, CheckCircle2, Send, X } from 'lucide-react';
 
-export function HomeView({ onOpenPost, onOpenProfile, onOpenNotifications, unreadCount = 0 }) {
+export function HomeView({ onOpenPost, onOpenProfile, onOpenNotifications, onCreatePost, unreadCount = 0 }) {
   const { user } = useAuth();
   const { theme, toggleTheme, isDark } = useTheme();
+  const isAdmin = user?.role === 'ADMIN';
   const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -232,6 +233,19 @@ export function HomeView({ onOpenPost, onOpenProfile, onOpenNotifications, unrea
 
           {/* Right Header Controls */}
           <div className="flex items-center space-x-3">
+            {/* HOD Create Post Header Button */}
+            {isAdmin && (
+              <button 
+                onClick={() => onCreatePost && onCreatePost()}
+                title="Create New Official Publication"
+                className="bg-[#091734] hover:bg-[#13254e] dark:bg-amber-400 dark:text-[#091734] text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm active:scale-95 transition-all border border-[#C5A880]/40 shrink-0 cursor-pointer"
+              >
+                <span className="text-base leading-none font-bold">+</span>
+                <span className="hidden sm:inline">Create Post</span>
+                <span className="sm:hidden">Create</span>
+              </button>
+            )}
+
             {/* Notification Bell with Unread Indicator */}
             <button 
               onClick={() => onOpenNotifications && onOpenNotifications()}
@@ -279,6 +293,34 @@ export function HomeView({ onOpenPost, onOpenProfile, onOpenNotifications, unrea
       {/* Main Feed Canvas */}
       <main className="flex-1 max-w-5xl mx-auto w-full px-6 lg:px-10 py-6 space-y-6">
         
+        {/* HOD Quick Creation Card (Appears on HOD Login) */}
+        {isAdmin && (
+          <div 
+            onClick={() => onCreatePost && onCreatePost()}
+            className="bg-white dark:bg-[#0F1A2E] rounded-3xl border-2 border-dashed border-[#C5A880]/70 p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-amber-50/40 dark:hover:bg-[#16233d] transition-all shadow-xs group"
+          >
+            <div className="flex items-center space-x-3.5 min-w-0">
+              <div className="w-11 h-11 rounded-2xl bg-[#091734] text-amber-300 flex items-center justify-center font-bold text-xl group-hover:scale-105 transition-transform border border-amber-400/40 shrink-0">
+                +
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-[#091734] dark:text-amber-200 truncate">
+                  Publish an official announcement, story, or article
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                  Posting under authorized Head of Department identity
+                </p>
+              </div>
+            </div>
+            <button 
+              type="button"
+              className="text-xs font-bold bg-[#091734] text-white px-3.5 py-2 rounded-xl group-hover:bg-[#152a5c] transition-colors shrink-0 ml-3"
+            >
+              Create Post
+            </button>
+          </div>
+        )}
+
         {/* Feed Status / Refresh Bar */}
         <div className="flex items-center justify-between text-xs text-slate-500 font-serif px-1">
           <span className="italic">Latest Official Publications & Highlights</span>

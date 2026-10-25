@@ -41,6 +41,17 @@ export function SidebarNav({ activeTab, setActiveTab }) {
           <div className="w-10 h-[1px] bg-[#C5A880]/30 mt-4"></div>
         </div>
 
+        {/* HOD Create Post Primary Button */}
+        {isAdmin && (
+          <button
+            onClick={() => setActiveTab('create')}
+            className="w-full mb-4 bg-gradient-to-r from-[#C5A880] to-[#E3C9A6] hover:from-[#bfa175] hover:to-[#dbbf98] text-[#091734] font-bold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 shadow-lg transition-all active:scale-[0.98] cursor-pointer"
+          >
+            <span className="text-xl font-bold leading-none">+</span>
+            <span className="tracking-wide text-sm font-serif">Create Post</span>
+          </button>
+        )}
+
         {/* Navigation Items List */}
         <nav className="space-y-2 mt-4">
           {navItems.map((item) => {

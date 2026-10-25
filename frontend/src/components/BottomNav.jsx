@@ -25,15 +25,15 @@ export function BottomNav({ activeTab, setActiveTab, unreadCount = 0 }) {
     { id: 'profile', label: 'Profile', icon: ProfileIcon }
   ];
 
-  const adminNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'posts', label: 'Posts', icon: MyPostsIcon },
+  const hodNavItems = [
+    { id: 'home', label: 'Home', icon: HomeIcon },
+    { id: 'explore', label: 'Explore', icon: ExploreIcon },
     { id: 'create', label: 'Create', icon: AddIcon, highlight: true },
-    { id: 'moderation', label: 'Moderation', icon: ShieldAlert },
-    { id: 'profile', label: 'HOD Profile', icon: ProfileIcon }
+    { id: 'magazine', label: 'Magazine', icon: MagazineIcon },
+    { id: 'profile', label: 'Profile', icon: ProfileIcon }
   ];
 
-  const navItems = isAdmin ? adminNavItems : studentFacultyNavItems;
+  const navItems = isAdmin ? hodNavItems : studentFacultyNavItems;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-[#070D19]/95 backdrop-blur-md border-t border-amber-900/10 dark:border-[#1F304E] py-2 px-3 flex items-center justify-around z-50 shadow-2xl">

@@ -56,15 +56,9 @@ function MainAppContent() {
     }
   }, [isAuthenticated, user, activeTab]);
 
-  // Adjust default tab based on user role when logging in
+  // Default tab is always 'home' for everyone (including HOD)
   useEffect(() => {
-    if (user) {
-      if (user.role === 'ADMIN') {
-        setActiveTab('dashboard');
-      } else {
-        setActiveTab('home');
-      }
-    }
+    setActiveTab('home');
   }, [user?.role]);
 
   // Render View based on activeTab
@@ -89,6 +83,7 @@ function MainAppContent() {
             onOpenPost={(id) => setSelectedPostId(id)}
             onOpenProfile={(profileId) => setViewingProfileId(profileId)}
             onOpenNotifications={() => setActiveTab('notifications')}
+            onCreatePost={() => setActiveTab('create')}
             unreadCount={unreadNotifications}
           />
         );
