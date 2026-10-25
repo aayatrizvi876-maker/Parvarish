@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth, getDefaultProfileForUser } from '../context/AuthContext';
 import { api } from '../services/api';
 import { 
   BackIcon, 
@@ -118,53 +118,28 @@ export function ProfileView({
   onNavigate,
   profileUserId 
 }) {
-  const { user, profileData: authProfileData, updateProfileData, completeProfileSetup, logout } = useAuth();
+  const { user, profileData: authProfileData, updateProfileData, logout } = useAuth();
 
-  // Load custom profile details from AuthContext / localStorage
-  const [profileData, setProfileData] = useState(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.warn('Could not load stored profile:', e);
-    }
-    return authProfileData || {
-      prefix: 'Mr.',
-      name: user?.role === 'ADMIN' ? 'Admin' : (user?.name || 'Admin'),
-      bio: user?.bio || 'bio',
-      department: user?.department || 'Management',
-      university: 'United University',
-      avatarType: 'custom_image',
-      avatarUrl: user?.profileImage || '',
-      coverUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1600&q=85',
-      postsCount: 4,
-      followersCount: 0,
-      followingCount: 0
-    };
-  });
+  const isViewingSelf = !profileUserId || profileUserId === user?.id;
+  const isViewingHOD = (profileUserId === 'usr_hod_official_001' || profileUserId === 'admin') || (isViewingSelf && user?.role === 'ADMIN');
 
-  // Keep in sync with AuthContext and window profile events
-  useEffect(() => {
-    if (authProfileData) {
-      setProfileData(prev => ({
-        ...prev,
-        ...authProfileData
-      }));
-    }
-  }, [authProfileData]);
+  const publicHodProfile = {
+    prefix: 'Prof. Dr.',
+    name: 'Head of Department',
+    bio: 'Head of Department, Computer Science & Engineering. Official PARVARISH university publisher.',
+    department: 'Computer Science & Engineering',
+    university: 'United University',
+    avatarType: 'custom_image',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+    coverUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1600&q=85',
+    postsCount: 4,
+    followersCount: 1420,
+    followingCount: 12
+  };
 
-  useEffect(() => {
-    const handleSync = (e) => {
-      if (e.detail) {
-        setProfileData(prev => ({
-          ...prev,
-          ...e.detail
-        }));
-      }
-    };
-    window.addEventListener('parvarish_profile_sync', handleSync);
-    return () => window.removeEventListener('parvarish_profile_sync', handleSync);
-  }, []);
+  const profileData = (!isViewingSelf && isViewingHOD) 
+    ? publicHodProfile 
+    : (authProfileData || getDefaultProfileForUser(user));
 
   // Active sub-tab: 'posts' | 'comments'
   const [activeTab, setActiveTab] = useState('posts');
@@ -180,6 +155,25 @@ export function ProfileView({
   const directAvatarFileRef = useRef(null);
   const directCoverFileRef = useRef(null);
 
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleSaveProfile = (updatedFields) => {
+    const updated = {
+      ...profileData,
+      ...updatedFields,
+      university: 'United University'
+    };
+
+    if (updateProfileData) {
+      updateProfileData(updated);
+    }
+    showToast('Profile updated successfully.');
+    setIsEditModalOpen(false);
+  };
+
   const handleDirectAvatarUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -190,7 +184,7 @@ export function ProfileView({
             avatarType: 'custom_image',
             avatarUrl: uploadEvent.target.result
           });
-          showToast('Profile photo updated from gallery.');
+          showToast('Profile photo updated.');
         }
       };
       reader.readAsDataURL(file);
@@ -206,62 +200,11 @@ export function ProfileView({
           handleSaveProfile({
             coverUrl: uploadEvent.target.result
           });
-          showToast('Cover photo updated from gallery.');
+          showToast('Cover photo updated.');
         }
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  // Sync state if user changes
-  useEffect(() => {
-    if (user) {
-      setProfileData(prev => ({
-        ...prev,
-        name: prev.name || (user.role === 'ADMIN' ? 'Admin' : user.name),
-        department: prev.department || user.department || 'Management',
-        university: 'United University' // Always fixed to United University
-      }));
-    }
-  }, [user]);
-
-  const showToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleSaveProfile = (updatedFields) => {
-    const updated = {
-      ...profileData,
-      ...updatedFields,
-      university: 'United University' // Cannot be changed
-    };
-    setProfileData(updated);
-
-    // Sync to global AuthContext & broadcast update
-    if (updateProfileData) {
-      updateProfileData(updated);
-    } else {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      } catch (e) {
-        console.warn('Failed to save to localStorage:', e);
-      }
-    }
-
-    if (completeProfileSetup) {
-      completeProfileSetup({
-        name: updated.name,
-        department: updated.department,
-        designation: updated.department,
-        bio: updated.bio,
-        profileImage: updated.avatarUrl || null,
-        coverImage: updated.coverUrl || null
-      });
-    }
-
-    showToast('Profile updated successfully.');
-    setIsEditModalOpen(false);
   };
 
   const openEditModalWithField = (field) => {
@@ -299,10 +242,10 @@ export function ProfileView({
 
           <div>
             <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#091734] leading-tight tracking-tight">
-              My Profile
+              {isViewingSelf ? (user?.role === 'ADMIN' ? 'HOD Profile' : 'My Profile') : (profileData.name || 'Member Profile')}
             </h1>
             <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
-              Your Account Details
+              {isViewingSelf ? 'Your Account Details' : 'Official University Profile'}
             </p>
           </div>
         </div>
@@ -311,17 +254,19 @@ export function ProfileView({
         <div className="flex items-center space-x-2.5 sm:space-x-3">
           
           {/* Edit Profile Header Button */}
-          <button
-            onClick={() => {
-              setEditFocusField('general');
-              setIsEditModalOpen(true);
-            }}
-            className="flex items-center space-x-1.5 bg-[#091734] hover:bg-[#15274d] text-[#FFF4DC] px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs transition-all active:scale-95 border border-amber-300/30 shrink-0 cursor-pointer"
-            title="Edit Profile Details"
-          >
-            <Pencil size={12} className="text-amber-300" />
-            <span className="hidden sm:inline">Edit Profile</span>
-          </button>
+          {isViewingSelf && (
+            <button
+              onClick={() => {
+                setEditFocusField('general');
+                setIsEditModalOpen(true);
+              }}
+              className="flex items-center space-x-1.5 bg-[#091734] hover:bg-[#15274d] text-[#FFF4DC] px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs transition-all active:scale-95 border border-amber-300/30 shrink-0 cursor-pointer"
+              title="Edit Profile Details"
+            >
+              <Pencil size={12} className="text-amber-300" />
+              <span className="hidden sm:inline">Edit Profile</span>
+            </button>
+          )}
 
           {/* Notification Bell */}
           <button
@@ -454,13 +399,15 @@ export function ProfileView({
           />
 
           {/* Avatar Camera Button Badge (Opens Device Gallery) */}
-          <button
-            onClick={() => directAvatarFileRef.current?.click()}
-            className="absolute bottom-1 left-18 sm:bottom-1 sm:left-21 w-7 h-7 rounded-full bg-[#EFECE6] hover:bg-[#E0DBD0] border-2 border-[#FAF8F5] text-[#091734] shadow-sm flex items-center justify-center transition-all active:scale-95"
-            title="Select Profile Photo from Gallery"
-          >
-            <Camera size={13} />
-          </button>
+          {isViewingSelf && (
+            <button
+              onClick={() => directAvatarFileRef.current?.click()}
+              className="absolute bottom-1 left-18 sm:bottom-1 sm:left-21 w-7 h-7 rounded-full bg-[#EFECE6] hover:bg-[#E0DBD0] border-2 border-[#FAF8F5] text-[#091734] shadow-sm flex items-center justify-center transition-all active:scale-95"
+              title="Select Profile Photo from Gallery"
+            >
+              <Camera size={13} />
+            </button>
+          )}
         </div>
 
         {/* 3. Name, Prefix & Bio Section */}
@@ -471,31 +418,33 @@ export function ProfileView({
               {profileData.prefix || 'Mr.'}
             </span>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#091734] dark:text-[#F8FAFC] tracking-tight">
-              {profileData.name || 'Admin'}
+              {profileData.name || 'Member'}
             </h2>
           </div>
 
           {/* Bio Row */}
           <div className="pt-0.5">
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-serif">
-              {profileData.bio || 'bio'}
+              {profileData.bio || 'PARVARISH Community Member'}
             </p>
           </div>
 
           {/* Prominent Edit Profile Button (Works perfectly on Mobile & Desktop) */}
-          <div className="pt-3 pb-1">
-            <button
-              type="button"
-              onClick={() => {
-                setEditFocusField('general');
-                setIsEditModalOpen(true);
-              }}
-              className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-[#0F1A2E] hover:bg-amber-50/70 dark:hover:bg-[#162540] border border-slate-300 dark:border-[#1F304E] text-[#091734] dark:text-[#FFF4DC] font-bold text-xs sm:text-sm shadow-xs flex items-center justify-center space-x-2 transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <Pencil size={14} className="text-amber-600 dark:text-amber-400" />
-              <span>Edit Profile Details</span>
-            </button>
-          </div>
+          {isViewingSelf && (
+            <div className="pt-3 pb-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditFocusField('general');
+                  setIsEditModalOpen(true);
+                }}
+                className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-[#0F1A2E] hover:bg-amber-50/70 dark:hover:bg-[#162540] border border-slate-300 dark:border-[#1F304E] text-[#091734] dark:text-[#FFF4DC] font-bold text-xs sm:text-sm shadow-xs flex items-center justify-center space-x-2 transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <Pencil size={14} className="text-amber-600 dark:text-amber-400" />
+                <span>Edit Profile Details</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 4. Academic Info Card (Department & University) */}
@@ -532,7 +481,7 @@ export function ProfileView({
         </div>
 
         {/* 🏛️ HOD Administrative Control Center (Visible strictly on HOD Admin login) */}
-        {user?.role === 'ADMIN' && (
+        {isViewingSelf && user?.role === 'ADMIN' && (
           <div className="bg-white dark:bg-[#0F1A2E] rounded-3xl border border-amber-900/15 dark:border-amber-400/20 p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
               <div className="flex items-center space-x-2">

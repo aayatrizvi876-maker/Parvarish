@@ -433,26 +433,14 @@ export const api = {
       });
       return await handleResponse(res);
     } catch (e) {
-      let savedProfile = null;
-      try {
-        savedProfile = JSON.parse(localStorage.getItem('parvarish_profile_custom_v2') || '{}');
-      } catch (err) {}
       let savedUser = null;
       try {
-        savedUser = JSON.parse(localStorage.getItem('parvarish_user_session') || '{}');
+        savedUser = JSON.parse(localStorage.getItem('parvarish_user_session') || 'null');
       } catch (err) {}
-      return {
-        user: {
-          id: savedUser?.id || 'usr_default',
-          name: savedUser?.name || savedProfile?.name || 'Aayat Rizvi',
-          email: savedUser?.email || savedProfile?.email || 'aayat@uniteduniversity.edu.in',
-          role: savedUser?.role || savedProfile?.role || 'STUDENT',
-          department: savedUser?.department || savedProfile?.department || 'Computer Science',
-          institution: 'United University',
-          profileImage: savedUser?.profileImage || savedProfile?.avatarUrl || null,
-          isVerified: savedUser?.role === 'ADMIN'
-        }
-      };
+      if (savedUser) {
+        return { user: savedUser };
+      }
+      return { user: null };
     }
   },
 
@@ -520,16 +508,13 @@ export const api = {
       });
       return await handleResponse(res);
     } catch (e) {
-      let userProfile = null;
-      try {
-        const saved = localStorage.getItem('parvarish_profile_custom_v2');
-        if (saved) userProfile = JSON.parse(saved);
-      } catch (err) {}
       let userSession = null;
       try {
         const saved = localStorage.getItem('parvarish_user_session');
         if (saved) userSession = JSON.parse(saved);
       } catch (err) {}
+
+      const isHodPost = userSession?.role === 'ADMIN' || !userSession;
 
       const newPost = {
         id: `post_${Date.now()}`,
@@ -537,7 +522,7 @@ export const api = {
         content: postData.content,
         caption: postData.title,
         categoryId: postData.categoryId || 'announcements',
-        subCategory: postData.subCategory || 'Official HOD Notice',
+        subCategory: postData.subCategory || (isHodPost ? 'Official HOD Notice' : 'Campus Update'),
         mediaUrl: postData.mediaUrl,
         mediaType: postData.mediaType || (postData.mediaUrl ? 'image' : null),
         youtubeUrl: postData.youtubeUrl,
@@ -549,12 +534,22 @@ export const api = {
         isLikedByMe: false,
         isSavedByMe: false,
         createdAt: new Date().toISOString(),
-        user: {
-          name: userSession?.name || userProfile?.name || 'Head of Department',
-          role: userSession?.role || 'ADMIN',
-          designation: userSession?.designation || (userProfile?.department ? `${userProfile.department} Department` : 'Head of Department'),
-          profileImage: userSession?.profileImage || userProfile?.avatarUrl || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+        user: isHodPost ? {
+          id: 'usr_hod_official_001',
+          name: 'Head of Department',
+          role: 'ADMIN',
+          designation: 'Head of Department',
+          department: 'Computer Science & Engineering',
+          profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
           isVerified: true
+        } : {
+          id: userSession?.id || `usr_${Date.now()}`,
+          name: userSession?.name || 'Student Member',
+          role: userSession?.role || 'STUDENT',
+          designation: userSession?.designation || 'Student Member',
+          department: userSession?.department || 'Computer Science',
+          profileImage: userSession?.profileImage || null,
+          isVerified: false
         }
       };
 

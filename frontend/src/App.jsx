@@ -71,6 +71,10 @@ function MainAppContent() {
           onClose={() => setViewingProfileId(null)}
           onBack={() => setViewingProfileId(null)}
           onOpenNotifications={() => setActiveTab('notifications')}
+          onNavigate={(tab) => {
+            setViewingProfileId(null);
+            setActiveTab(tab);
+          }}
         />
       );
     }
