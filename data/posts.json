@@ -1,6 +1,34 @@
 {
   "posts": [
     {
+      "id": "1efe4ad9-a786-46f8-a851-1c55108aef43",
+      "title": "yes",
+      "content": "no",
+      "caption": "yes",
+      "categoryId": "announcements",
+      "subCategory": "Official HOD Notice",
+      "mediaUrl": null,
+      "mediaType": null,
+      "youtubeUrl": null,
+      "attachmentUrl": null,
+      "isPinned": false,
+      "likesCount": 0,
+      "commentsCount": 0,
+      "viewsCount": 1,
+      "isLikedByMe": false,
+      "isSavedByMe": false,
+      "createdAt": "2026-10-26T17:28:51.575Z",
+      "user": {
+        "id": "usr_hod_official_001",
+        "name": "Head of Department",
+        "role": "ADMIN",
+        "designation": "Head of Department",
+        "department": "Computer Science & Engineering",
+        "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+        "isVerified": true
+      }
+    },
+    {
       "id": "post_cloud_test_1",
       "title": "HOD Official Announcement: Welcome to PARVARISH Cloud!",
       "content": "This post is synchronized across all devices in real time via our global cloud database.",
