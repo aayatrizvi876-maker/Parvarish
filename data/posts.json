@@ -1,3 +1,10 @@
 {
-  "posts": []
+  "posts": [
+    {
+      "id": "post_cloud_test_1",
+      "title": "HOD Official Announcement: Welcome to PARVARISH Cloud!",
+      "content": "This post is synchronized across all devices in real time via our global cloud database.",
+      "createdAt": "2026-10-26T17:15:41.468Z"
+    }
+  ]
 }
